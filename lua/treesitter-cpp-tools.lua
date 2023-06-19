@@ -15,6 +15,8 @@ local M = {
          },
          chrono = {
             ["chrono::system_clock"] = true,
+            ["chrono::milliseconds"] = true,
+            ["chrono::seconds"] = true,
          },
          -- compare = {},
          -- csetjmp = {},
@@ -41,7 +43,10 @@ local M = {
          -- expected = {},
          -- functional = {},
          -- initializer_list = {},
-         -- optional = {},
+         optional = {
+            optional = true,
+            nullopt = true,
+         },
          -- source_location = {},
          tuple = {
             tie = true,
@@ -53,6 +58,7 @@ local M = {
          -- typeindex = {},
          -- typeinfo = {},
          utility = {
+            pair = true,
             move = true,
          },
          -- variant = {},
@@ -105,9 +111,14 @@ local M = {
          -- stdfloat = {},
          -- cassert = {},
          -- cerrno = {},
-         -- exception = {},
+         exception = {
+            exception = true,
+            ["exception::exception"] = true,
+         },
          -- stacktrace = {},
-         -- stdexcept = {},
+         stdexcept = {
+            runtime_error = true,
+         },
          -- system_error = {},
          cctype = {
             tolower = true,
@@ -135,23 +146,35 @@ local M = {
          -- flat_set = {},
          -- forward_list = {},
          -- list = {},
-         -- map = {},
+         map = {
+            map = true,
+         },
          -- mdspan = {},
          -- queue = {},
-         -- set = {},
+         set = {
+            set = true,
+         },
          -- span = {},
          -- stack = {},
-         -- unordered_map = {},
-         -- unordered_set = {},
+         unordered_map = {
+            unordered_map = true,
+         },
+         unordered_set = {
+            unordered_set = true,
+         },
          vector = {
             vector = true,
          },
          iterator = {
+            advance = true,
             distance = true,
          },
          -- generator = {},
          ranges = {},
          algorithm = {
+            max = true,
+            min = true,
+            clamp = true,
             partition = true,
             remove_if = true,
             find_if = true,
@@ -176,7 +199,9 @@ local M = {
          iomanip = {
             setw = true,
          },
-         ios = {},
+         ios = {
+            ["ios_base::failure"] = true,
+         },
          iostream = {
             cout = true,
          },
@@ -243,10 +268,6 @@ local function node2token(node)
       return get_node_text(node:field('name')[1])
    elseif type == "template_function" then
       return get_node_text(node:field('name')[1])
-   elseif type == "type_identifier" then
-      return get_node_text(node)
-   elseif type == "identifier" then
-      return get_node_text(node)
    elseif type == "qualified_identifier" then
       local scope = node:field('scope')[1]
       local scope_type = scope:type()
@@ -262,7 +283,7 @@ local function node2token(node)
    -- if we don't know how to handle the node type we
    -- return the entire text for that node so that it
    -- can be used for debugging later
-   return "[UNKNOWN] " .. get_node_text(node)
+   return get_node_text(node)
 end
 
 local function set_intersection(a, b)
