@@ -12,7 +12,9 @@ M.stl = {
    headers = {
       -- concepts = {},
       -- coroutine = {},
-      -- any = {},
+      any = {
+         any = true,
+      },
       bitset = {
          bitset = true,
       },
@@ -153,12 +155,16 @@ M.stl = {
          map = true,
       },
       -- mdspan = {},
-      -- queue = {},
+      queue = {
+         queue = true,
+      },
       set = {
          set = true,
       },
       -- span = {},
-      -- stack = {},
+      stack = {
+         stack = true,
+      },
       unordered_map = {
          unordered_map = true,
       },
@@ -186,7 +192,37 @@ M.stl = {
       execution = {},
       bit = {},
       -- cfenv = {},
-      -- cmath = {},
+      cmath = {
+         abs = true,
+         fabs = true,
+         fabsf = true,
+         fabsl = true,
+         fmod = true,
+         fmodf = true,
+         fmodl = true,
+         remainder = true,
+         remainderf = true,
+         remainderl = true,
+         remquo = true,
+         remquof = true,
+         remquol = true,
+         fma = true,
+         fmaf = true,
+         fmal = true,
+         fmax = true,
+         fmaxf = true,
+         fmaxl = true,
+         fmin = true,
+         fminf = true,
+         fminl = true,
+         fdim = true,
+         fdimf = true,
+         fdiml = true,
+         nan = true,
+         nanf = true,
+         nanl = true,
+         lerp = true,
+      },
       -- complex = {},
       -- numbers = {},
       numeric = {
@@ -198,7 +234,11 @@ M.stl = {
       -- clocale = {},
       -- locale = {},
       -- cstdio = {},
-      -- fstream = {},
+      fstream = {
+         fstream = true,
+         ifstream = true,
+         ofstream = true,
+      },
       iomanip = {
          setw = true,
       },
@@ -238,6 +278,7 @@ M.stl = {
    }
 }
 
+-- some headers can be skipped if iostream is present
 util.set_add(M.stl.headers.iostream, M.stl.headers.ios)
 util.set_add(M.stl.headers.iostream, M.stl.headers.streambuf)
 util.set_add(M.stl.headers.iostream, M.stl.headers.istream)
