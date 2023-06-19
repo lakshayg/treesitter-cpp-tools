@@ -1,3 +1,5 @@
+local util = require("utility")
+
 local M = {
    stl = {
       ignore = {
@@ -236,24 +238,10 @@ local M = {
    }
 }
 
-local function table_size(t)
-   local count = 0
-   for _, __ in pairs(t) do
-      count = count + 1
-   end
-   return count
-end
-
-local function set_add(a, b)
-   for k, _ in pairs(b) do
-      a[k] = true
-   end
-end
-
-set_add(M.stl.headers.iostream, M.stl.headers.ios)
-set_add(M.stl.headers.iostream, M.stl.headers.streambuf)
-set_add(M.stl.headers.iostream, M.stl.headers.istream)
-set_add(M.stl.headers.iostream, M.stl.headers.ostream)
+util.set_add(M.stl.headers.iostream, M.stl.headers.ios)
+util.set_add(M.stl.headers.iostream, M.stl.headers.streambuf)
+util.set_add(M.stl.headers.iostream, M.stl.headers.istream)
+util.set_add(M.stl.headers.iostream, M.stl.headers.ostream)
 
 local current_buf  = 0
 
@@ -284,24 +272,6 @@ local function node2token(node)
    -- return the entire text for that node so that it
    -- can be used for debugging later
    return get_node_text(node)
-end
-
-local function set_intersection(a, b)
-   local count = 0
-   local intersection = {}
-   for k, _ in pairs(a) do
-      if b[k] then
-         intersection[k] = true
-         count = count + 1
-      end
-   end
-   return intersection, count
-end
-
-local function set_minus(a, b)
-   for k, _ in pairs(b) do
-      a[k] = nil
-   end
 end
 
 local function print_includes(s)
@@ -358,8 +328,8 @@ function M.most_matching_header(tokens)
    local max_count = 0
 
    for header, header_tokens in pairs(M.stl.headers) do
-      local header_size = table_size(header_tokens)
-      local found, count = set_intersection(tokens, header_tokens)
+      local header_size = util.table_size(header_tokens)
+      local found, count = util.set_intersection(tokens, header_tokens)
 
       if (count > max_count) or (count == max_count and header_size < best_header_size) then
          best_header = header
@@ -374,7 +344,7 @@ end
 
 function M.generate_includes()
    local tokens = get_std_tokens()
-   set_minus(tokens, M.stl.ignore)
+   util.set_minus(tokens, M.stl.ignore)
 
    local includes = {}
    while true do
@@ -384,11 +354,11 @@ function M.generate_includes()
       end
 
       table.insert(includes, "#include <" .. header .. "> // " .. print_includes(found))
-      set_minus(tokens, found)
+      util.set_minus(tokens, found)
    end
 
    table.sort(includes)
-   if table_size(tokens) > 0 then
+   if util.table_size(tokens) > 0 then
       table.insert(includes, "// Skipped: " .. print_includes(tokens))
    end
    return includes
