@@ -130,6 +130,7 @@ M.stl = {
          isspace = true,
          isdigit = true,
          isalpha = true,
+         isalnum = true,
       },
       -- charconv = {},
       -- cstring = {},
@@ -139,6 +140,9 @@ M.stl = {
       -- format = {},
       string = {
          string = true,
+         stof = true,
+         stod = true,
+         stold = true,
       },
       string_view = {
          string_view = true,
